@@ -1,12 +1,13 @@
 import sys
 import time
+import requests
+
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from urllib.parse import urljoin
-
-import requests
 from bs4 import BeautifulSoup
 from requests import HTTPError
+from livereload import Server, shell
 
 
 def parse_book_image(soup, book_url):
@@ -33,7 +34,7 @@ def check_for_redirect(response):
         raise HTTPError
 
 
-if __name__ == '__main__':
+def main():
     env = Environment(
         loader=FileSystemLoader('.'),
         autoescape=select_autoescape(['html'])
@@ -69,5 +70,11 @@ if __name__ == '__main__':
     with open('index.html', 'w', encoding="utf8") as file:
         file.write(rendered_page)
 
-    server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
-    server.serve_forever()
+
+if __name__ == '__main__':
+    server = Server()
+    server.watch('template.html', main)
+
+    # server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
+    server.serve(root='.')
+    # server.serve_forever()
