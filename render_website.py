@@ -2,10 +2,10 @@ import sys
 import time
 import requests
 
-from http.server import HTTPServer, SimpleHTTPRequestHandler
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
+from more_itertools import chunked
 from requests import HTTPError
 from livereload import Server, shell
 
@@ -44,14 +44,13 @@ def main():
 
     books = []
 
-    for book_id in range(1, 100):
+    for book_id in range(1, 20):
         try:
             book_url = f'https://tululu.org/b{book_id}/'
             book_page_response = requests.get(book_url)
             book_page_response.raise_for_status()
             check_for_redirect(book_page_response)
 
-            soup = BeautifulSoup(book_page_response.text, 'lxml')
             title, author, image_link = parse_book_page(book_page_response)
 
             books.append({'title': title, 'author': author, 'image': image_link, 'url': book_url})
@@ -62,7 +61,7 @@ def main():
             print('Ошибка соединения', file=sys.stderr)
             print('Попытка повторного подключения\n')
             time.sleep(10)
-
+    books = chunked(books, 2)
     rendered_page = template.render(
         books=books
     )
@@ -73,8 +72,8 @@ def main():
 
 if __name__ == '__main__':
     server = Server()
+    server.watch('render_website.py', main)
     server.watch('template.html', main)
 
-    # server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
     server.serve(root='.')
     # server.serve_forever()
