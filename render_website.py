@@ -1,3 +1,4 @@
+import os
 import sys
 import time
 import requests
@@ -42,38 +43,40 @@ def main():
 
     template = env.get_template('template.html')
 
-    books = []
+    for index, page in enumerate(chunked(range(1, 101), 11), start=1):
+        books = []
+        for book_id in page:
+            try:
+                book_url = f'https://tululu.org/b{book_id}/'
+                book_text_url = f'https://tululu.org/txt.php?id={book_id}/'
+                book_page_response = requests.get(book_url)
+                book_page_response.raise_for_status()
+                check_for_redirect(book_page_response)
 
-    for book_id in range(1, 20):
-        try:
-            book_url = f'https://tululu.org/b{book_id}/'
-            book_page_response = requests.get(book_url)
-            book_page_response.raise_for_status()
-            check_for_redirect(book_page_response)
+                title, author, image_link = parse_book_page(book_page_response)
 
-            title, author, image_link = parse_book_page(book_page_response)
+                books.append({'title': title, 'author': author, 'image': image_link, 'url': book_text_url})
+            except HTTPError:
+                print('Книга отсутствует в свободном доступе\n', file=sys.stderr)
+                continue
+            except requests.exceptions.ConnectionError:
+                print('Ошибка соединения', file=sys.stderr)
+                print('Попытка повторного подключения\n')
+                time.sleep(10)
+        books = chunked(books, 2)
+        rendered_page = template.render(
+            books=books
+        )
 
-            books.append({'title': title, 'author': author, 'image': image_link, 'url': book_url})
-        except HTTPError:
-            print('Книга отсутствует в свободном доступе\n', file=sys.stderr)
-            continue
-        except requests.exceptions.ConnectionError:
-            print('Ошибка соединения', file=sys.stderr)
-            print('Попытка повторного подключения\n')
-            time.sleep(10)
-    books = chunked(books, 2)
-    rendered_page = template.render(
-        books=books
-    )
-
-    with open('index.html', 'w', encoding="utf8") as file:
-        file.write(rendered_page)
+        with open(os.path.join('pages', f'index{index}.html'), 'w', encoding="utf8") as file:
+            file.write(rendered_page)
 
 
 if __name__ == '__main__':
+    os.makedirs('pages', exist_ok=True)
+
     server = Server()
     server.watch('render_website.py', main)
     server.watch('template.html', main)
 
     server.serve(root='.')
-    # server.serve_forever()
