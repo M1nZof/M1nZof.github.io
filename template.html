@@ -12,7 +12,7 @@
   </head>
   <body>
 		<div class="mx-auto" style="width: 200px;">
-			<ul class="pagination">
+			<ul class="pagination mt-3">
 				{% if current_page_number != 1 %}
 					<li class="page-item"><a class="page-link" href="index{{current_page_number - 1}}.html">Назад</a></li>
 				{% else %}
@@ -48,6 +48,11 @@
 								<div class="card-body">
 									<h5>{{book.title}}</h5>
 									<p class="card-text">{{book.author}}</p>
+									<p class="card-text">
+									{% for genre in book.genres %}
+										<span class="badge badge-secondary">{{genre}}</span>
+									{% endfor %}
+									</p>
 									<p class="card-text">
 										<a href="{{book.url}}" target="_blank" rel="noopener noreferrer">Читать</a>
 									</p>

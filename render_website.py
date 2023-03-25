@@ -20,15 +20,21 @@ def parse_book_image(soup, book_url):
     return image_link
 
 
+def parse_book_genres(soup):
+    genres_tag = soup.find('span', {'class': 'd_book'}).find_all('a')
+
+    return [genre.text for genre in genres_tag]
+
+
 def parse_book_page(book_page):
     soup = BeautifulSoup(book_page.text, 'lxml')
     title, _, author = soup.find('h1').text.split('\xa0')
 
     image_link = parse_book_image(soup, book_page.url)
-    # genres = parse_book_genres(soup)
+    genres = parse_book_genres(soup)
     # comments = parse_page_comments(soup)
 
-    return title, author, image_link
+    return title, author, image_link, genres
 
 
 def check_for_redirect(response):
@@ -58,9 +64,17 @@ def main():
                 book_page_response.raise_for_status()
                 check_for_redirect(book_page_response)
 
-                title, author, image_link = parse_book_page(book_page_response)
+                title, author, image_link, genres = parse_book_page(book_page_response)
 
-                books.append({'title': title, 'author': author, 'image': image_link, 'url': book_text_url})
+                books.append(
+                    {
+                        'title': title,
+                        'author': author,
+                        'image': image_link,
+                        'url': book_text_url,
+                        'genres': genres
+                    }
+                )
             except HTTPError:
                 print('Книга отсутствует в свободном доступе\n', file=sys.stderr)
                 continue
