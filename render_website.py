@@ -71,7 +71,7 @@ def main():
         books = chunked(books, 2)
         rendered_page = template.render(
             books=books,
-            page_number=index,
+            current_page_number=index,
             pages_quantity=pages_quantity
         )
 
