@@ -5,11 +5,11 @@ import time
 import requests
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 from bs4 import BeautifulSoup
 from more_itertools import chunked
 from requests import HTTPError
-from livereload import Server, shell
+from livereload import Server
 
 
 def parse_book_image(soup, book_url):
@@ -18,6 +18,19 @@ def parse_book_image(soup, book_url):
     image_link = urljoin(book_url, image_endlink)
 
     return image_link
+
+
+def download_image(image_link):
+    response = requests.get(image_link)
+    response.raise_for_status()
+
+    image_name = urlparse(image_link).path.split('/')[2]
+    image_path = os.path.join('images', str(image_name))
+
+    with open(image_path, 'wb') as image:
+        image.write(response.content)
+
+    return image_path
 
 
 def parse_book_genres(soup):
@@ -32,7 +45,6 @@ def parse_book_page(book_page):
 
     image_link = parse_book_image(soup, book_page.url)
     genres = parse_book_genres(soup)
-    # comments = parse_page_comments(soup)
 
     return title, author, image_link, genres
 
@@ -65,12 +77,13 @@ def main():
                 check_for_redirect(book_page_response)
 
                 title, author, image_link, genres = parse_book_page(book_page_response)
+                image = download_image(image_link)
 
                 books.append(
                     {
                         'title': title,
                         'author': author,
-                        'image': image_link,
+                        'image': image,
                         'url': book_text_url,
                         'genres': genres
                     }
@@ -95,6 +108,7 @@ def main():
 
 if __name__ == '__main__':
     os.makedirs('pages', exist_ok=True)
+    os.makedirs('images', exist_ok=True)
 
     main()
 
