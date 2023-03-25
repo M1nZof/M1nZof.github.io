@@ -1,3 +1,4 @@
+import math
 import os
 import sys
 import time
@@ -43,9 +44,13 @@ def main():
 
     template = env.get_template('template.html')
 
-    for index, page in enumerate(chunked(range(1, 101), 11), start=1):
+    books_quantity = 57
+    books_per_page = 10
+    pages_quantity = math.ceil(books_quantity / books_per_page)
+
+    for index, books_on_page in enumerate(chunked(range(1, books_quantity + 1), books_per_page), start=1):
         books = []
-        for book_id in page:
+        for book_id in books_on_page:
             try:
                 book_url = f'https://tululu.org/b{book_id}/'
                 book_text_url = f'https://tululu.org/txt.php?id={book_id}/'
@@ -65,7 +70,9 @@ def main():
                 time.sleep(10)
         books = chunked(books, 2)
         rendered_page = template.render(
-            books=books
+            books=books,
+            page_number=index,
+            pages_quantity=pages_quantity
         )
 
         with open(os.path.join('pages', f'index{index}.html'), 'w', encoding="utf8") as file:
@@ -74,6 +81,8 @@ def main():
 
 if __name__ == '__main__':
     os.makedirs('pages', exist_ok=True)
+
+    main()
 
     server = Server()
     server.watch('render_website.py', main)

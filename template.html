@@ -11,6 +11,15 @@
     <title>Hello, world!</title>
   </head>
   <body>
+		<div class="mx-auto" style="width: 200px;">
+			<ul class="pagination">
+				<li class="page-item"><a class="page-link" href="index{{page_number - 1}}.html">Previous</a></li>
+				{% for page_number in range(1, pages_quantity + 1) %}
+					<li class="page-item"><a class="page-link" href="index{{page_number}}.html">{{page_number}}</a></li>
+				{% endfor %}
+				<li class="page-item"><a class="page-link" href="index{{page_number + 1}}.html">Next</a></li>
+			</ul>
+		</div>
 		<div class="container">
 			{% for books_row in books %}
       <div class="row row-cols-2">
