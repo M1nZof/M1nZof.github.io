@@ -1,5 +1,9 @@
+import os
+import requests
+
 from urllib.parse import urljoin, urlparse
 from bs4 import BeautifulSoup
+from requests import HTTPError
 
 
 def parse_book_image(soup, book_url):
