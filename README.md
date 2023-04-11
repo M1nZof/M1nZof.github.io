@@ -32,4 +32,4 @@ python render_website.py
 
 ## Работа с уже развернутым сайтом 
 
-[Открыть сайт](https://m1nzof.github.io/index.html)
+[Открыть сайт](https://m1nzof.github.io/media/pages/)
