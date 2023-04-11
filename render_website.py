@@ -60,7 +60,12 @@ def main():
             pages_quantity=pages_quantity
         )
 
-        with open(os.path.join('media/pages', f'index{index}.html'), 'w', encoding="utf8") as file:
+        if index != 1:
+            page_name = f'index{index}.html'
+        else:
+            page_name = 'index.html'
+
+        with open(os.path.join('media/pages', page_name), 'w', encoding="utf8") as file:
             file.write(rendered_page)
 
 
