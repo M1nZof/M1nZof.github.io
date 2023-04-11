@@ -35,7 +35,7 @@ def download_image(image_link):
     response.raise_for_status()
 
     image_name = urlparse(image_link).path.split('/')[2]
-    image_path = os.path.join('images', str(image_name))
+    image_path = os.path.join('media/images', str(image_name))
 
     with open(image_path, 'wb') as image:
         image.write(response.content)

@@ -60,13 +60,13 @@ def main():
             pages_quantity=pages_quantity
         )
 
-        with open(os.path.join('pages', f'index{index}.html'), 'w', encoding="utf8") as file:
+        with open(os.path.join('media/pages', f'index{index}.html'), 'w', encoding="utf8") as file:
             file.write(rendered_page)
 
 
 if __name__ == '__main__':
-    os.makedirs('pages', exist_ok=True)
-    os.makedirs('images', exist_ok=True)
+    os.makedirs('media/pages', exist_ok=True)
+    os.makedirs('media/images', exist_ok=True)
 
     main()
 
