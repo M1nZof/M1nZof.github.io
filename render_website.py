@@ -65,12 +65,12 @@ def main():
         else:
             page_name = 'index.html'
 
-        with open(os.path.join('media/pages', page_name), 'w', encoding="utf8") as file:
+        with open(os.path.join('pages', page_name), 'w', encoding="utf8") as file:
             file.write(rendered_page)
 
 
 if __name__ == '__main__':
-    os.makedirs('media/pages', exist_ok=True)
+    os.makedirs('pages', exist_ok=True)
     os.makedirs('media/images', exist_ok=True)
 
     main()
