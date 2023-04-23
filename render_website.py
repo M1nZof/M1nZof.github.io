@@ -1,15 +1,10 @@
+import json
 import math
 import os
-import sys
-import time
-import requests
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from more_itertools import chunked
-from requests import HTTPError
 from livereload import Server
-
-from parsing_methods import check_for_redirect, parse_book_page, download_image
 
 
 def main():
@@ -20,53 +15,35 @@ def main():
 
     template = env.get_template('template.html')
 
-    books_quantity = 57
-    books_per_page = 10
-    pages_quantity = math.ceil(books_quantity / books_per_page)
+    with open(os.path.join('media', 'books', 'books.json'), 'r', encoding='utf-8') as file:
+        books = json.load(file)
+        books_quantity = len(books)
+        books_per_page = 10
+        pages_quantity = math.ceil(books_quantity / books_per_page)
 
-    for index, books_on_page in enumerate(chunked(range(1, books_quantity + 1), books_per_page), start=1):
-        books = []
-        for book_id in books_on_page:
-            try:
-                book_url = f'https://tululu.org/b{book_id}/'
-                book_text_url = f'https://tululu.org/txt.php?id={book_id}/'
-                book_page_response = requests.get(book_url)
-                book_page_response.raise_for_status()
-                check_for_redirect(book_page_response)
+        books_on_page = []
+        page_number = 0
 
-                title, author, image_link, genres = parse_book_page(book_page_response)
-                image = download_image(image_link)
-
-                books.append(
-                    {
-                        'title': title,
-                        'author': author,
-                        'image': image,
-                        'url': book_text_url,
-                        'genres': genres
-                    }
+        for index, book in enumerate(books, start=1):
+            books_on_page.append(book)
+            if index % books_per_page == 0 or index == len(books):
+                chunked_books_on_page = chunked(books_on_page, 2)
+                rendered_page = template.render(
+                    books=chunked_books_on_page,
+                    current_page_number=page_number + 1,
+                    pages_quantity=pages_quantity
                 )
-            except HTTPError:
-                print('Книга отсутствует в свободном доступе\n', file=sys.stderr)
-                continue
-            except requests.exceptions.ConnectionError:
-                print('Ошибка соединения', file=sys.stderr)
-                print('Попытка повторного подключения\n')
-                time.sleep(10)
-        books = chunked(books, 2)
-        rendered_page = template.render(
-            books=books,
-            current_page_number=index,
-            pages_quantity=pages_quantity
-        )
 
-        if index != 1:
-            page_name = f'index{index}.html'
-        else:
-            page_name = 'index.html'
+                if page_number != 0:
+                    page_name = f'index{page_number + 1}.html'
+                else:
+                    page_name = 'index.html'
 
-        with open(os.path.join('pages', page_name), 'w', encoding="utf8") as file:
-            file.write(rendered_page)
+                books_on_page = []
+                page_number += 1
+
+                with open(os.path.join('pages', page_name), 'w', encoding="utf8") as file:
+                    file.write(rendered_page)
 
 
 if __name__ == '__main__':
