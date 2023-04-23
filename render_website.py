@@ -1,6 +1,7 @@
 import json
 import math
 import os
+from urllib import parse
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from more_itertools import chunked
@@ -25,6 +26,7 @@ def main():
         page_number = 0
 
         for index, book in enumerate(books, start=1):
+            book['text_filename'] = parse.quote(book['text_filename'])
             books_on_page.append(book)
             if index % books_per_page == 0 or index == len(books):
                 chunked_books_on_page = chunked(books_on_page, 2)
