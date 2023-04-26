@@ -16,7 +16,7 @@ def main():
 
     template = env.get_template('template.html')
 
-    with open(os.path.join('media', 'books', 'books.json'), 'r', encoding='utf-8') as file:
+    with open('books.json', 'r', encoding='utf-8') as file:
         books = json.load(file)
         books_quantity = len(books)
         books_per_page = 10
