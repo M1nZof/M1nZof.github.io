@@ -44,34 +44,28 @@
 				{% endif %}
 			</ul>
 		</div>
-		<div class="container">
-			{% for books_row in books %}
-				<div class="row row-cols-2">
-					<div class="card mb-4" style="margin-left: 30px; width: 540px;">
-						{% for book in books_row %}
-							<div class="row g-5">
-								<div class="col-md-6">
-									<img src="{{book.image_link}}" class="card-img" alt="{{book.title}}">
-								</div>
-								<div class="col-6">
-									<div class="card-body">
-										<h5>{{book.title}}</h5>
-										<p class="card-text">{{book.author}}</p>
-										<p class="card-text">
-										{% for genre in book.genres %}
-											<span class="badge badge-secondary">{{genre}}</span>
-										{% endfor %}
-										</p>
-										<p class="card-text">
-											<a href="../media/books/{{book.text_filename}}" target="_blank" rel="noopener noreferrer">Читать</a>
-										</p>
-									</div>
-								</div>
+		<div class="container"> {% for books_row in books %}
+			<div class="row row-cols-2">
+				<div class="card mb-4" style="margin-left: 30px; width: 540px;"> {% for book in books_row %}
+					<div class="row g-5">
+						<div class="col-md-6">
+							<img src="../{{book.image}}" class="card-img" alt="{{book.title}}">
+						</div>
+						<div class="col-6">
+							<div class="card-body">
+								<h5>{{book.title}}</h5>
+								<p class="card-text">{{book.author}}</p>
+								<p class="card-text"> {% for genre in book.genres %}
+								<span class="badge badge-secondary">{{genre}}</span> {% endfor %}
+								</p>
+								<p class="card-text">
+									<a href="../media/{{book.text_filename}}" target="_blank" rel="noopener noreferrer">Читать</a>
+								</p>
 							</div>
+						</div>
 					</div>
-						{% endfor %}
-			{% endfor %}
-				</div>
+				</div>{% endfor %}{% endfor %}
+			</div>
     </div>
     <script src="../../static/jquery-3.5.1.slim.min.js"></script>
     <script src="../../static/bootstrap.bundle.min.js"></script>
