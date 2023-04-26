@@ -55,7 +55,6 @@ if __name__ == '__main__':
     main()
 
     server = Server()
-    server.watch('render_website.py', main)
     server.watch('template.html', main)
 
     server.serve(root='.')
