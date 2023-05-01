@@ -49,14 +49,14 @@ def main():
             with open(os.path.join('pages', page_name), 'w', encoding="utf8") as file:
                 file.write(rendered_page)
 
-
-if __name__ == '__main__':
     os.makedirs('pages', exist_ok=True)
     os.makedirs('media/images', exist_ok=True)
-
-    main()
 
     server = Server()
     server.watch('template.html', main)
 
     server.serve(root='.')
+
+
+if __name__ == '__main__':
+    main()
