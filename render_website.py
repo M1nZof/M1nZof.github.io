@@ -16,24 +16,26 @@ def main():
 
     template = env.get_template('template.html')
 
+    books_per_page = 10
+    books_on_page = []
+    page_number = 0
+    books_in_row = 2
+
     with open('books.json', 'r', encoding='utf-8') as file:
         books = json.load(file)
     books_quantity = len(books)
-    books_per_page = 10
     pages_quantity = math.ceil(books_quantity / books_per_page)
-
-    books_on_page = []
-    page_number = 0
 
     for index, book in enumerate(books, start=1):
         book['text_filename'] = parse.quote(book['text_filename'])
         books_on_page.append(book)
         if index % books_per_page == 0 or index == len(books):
-            chunked_books_on_page = chunked(books_on_page, 2)
+            chunked_books_on_page = chunked(books_on_page, books_in_row)
             rendered_page = template.render(
                 books=chunked_books_on_page,
                 current_page_number=page_number + 1,
-                pages_quantity=pages_quantity
+                pages_quantity=pages_quantity,
+                books_in_row=books_in_row
             )
 
             if page_number != 0:
