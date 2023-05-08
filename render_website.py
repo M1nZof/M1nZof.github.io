@@ -26,13 +26,13 @@ def main():
     books_quantity = len(books_properties)
     pages_quantity = math.ceil(books_quantity / books_per_page)
 
-    for index, book in enumerate(books_properties, start=1):
-        book['text_filename'] = parse.quote(book['text_filename'])
-        books_on_page.append(book)
+    for index, book_properity in enumerate(books_properties, start=1):
+        book_properity['text_filename'] = parse.quote(book_properity['text_filename'])
+        books_on_page.append(book_properity)
         if index % books_per_page == 0 or index == len(books_properties):
             chunked_books_on_page = chunked(books_on_page, books_in_row)
             rendered_page = template.render(
-                books=chunked_books_on_page,
+                books_properties=chunked_books_on_page,
                 current_page_number=page_number + 1,
                 pages_quantity=pages_quantity,
                 books_in_row=books_in_row

@@ -43,23 +43,23 @@
           <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Вперед</a>
         </li>{% endif %}
       </ul>
-    </div>{% for books_row in books %}
+    </div>{% for books_in_row in books_properties %}
     <div class="container">
-      <div class="row row-cols-{{books_in_row}}" style="flex-wrap: nowrap;">{% for book in books_row %}
+      <div class="row row-cols-{{books_in_row}}" style="flex-wrap: nowrap;">{% for book_descriptions in books_in_row %}
         <div class="card mb-4" style="margin-left: 30px; width: 540px;">
           <div class="row g-5">
             <div class="col-md-6">
-              <img src="../{{book.image}}" class="card-img" alt="{{book.title}}">
+              <img src="../{{book_descriptions.image}}" class="card-img" alt="{{book_descriptions.title}}">
             </div>
             <div class="col-6">
               <div class="card-body">
-                <h5>{{book.title}}</h5>
-                <p class="card-text">{{book.author}}</p>
-                <p class="card-text"> {% for genre in book.genres %}
+                <h5>{{book_descriptions.title}}</h5>
+                <p class="card-text">{{book_descriptions.author}}</p>
+                <p class="card-text"> {% for genre in book_descriptions.genres %}
                   <span class="badge badge-secondary">{{genre}}</span> {% endfor %}
                 </p>
                 <p class="card-text">
-                  <a href="../media/{{book.text_filename}}" target="_blank" rel="noopener noreferrer">Читать</a>
+                  <a href="../media/{{book_descriptions.text_filename}}" target="_blank" rel="noopener noreferrer">Читать</a>
                 </p>
               </div>
             </div>
