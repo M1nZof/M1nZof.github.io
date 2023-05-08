@@ -21,15 +21,15 @@ def main():
     page_number = 0
     books_in_row = 2
 
-    with open('books.json', 'r', encoding='utf-8') as file:
-        books = json.load(file)
-    books_quantity = len(books)
+    with open('books_properties.json', 'r', encoding='utf-8') as file:
+        books_properties = json.load(file)
+    books_quantity = len(books_properties)
     pages_quantity = math.ceil(books_quantity / books_per_page)
 
-    for index, book in enumerate(books, start=1):
+    for index, book in enumerate(books_properties, start=1):
         book['text_filename'] = parse.quote(book['text_filename'])
         books_on_page.append(book)
-        if index % books_per_page == 0 or index == len(books):
+        if index % books_per_page == 0 or index == len(books_properties):
             chunked_books_on_page = chunked(books_on_page, books_in_row)
             rendered_page = template.render(
                 books=chunked_books_on_page,
