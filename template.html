@@ -14,58 +14,58 @@
   </head>
   <body>
     <div class="w-25 mx-auto" style="width: 200px;">
-			<ul class="pagination mt-3">{% if current_page_number == 2 %}
-				<li class="page-item">
-					<a class="page-link" href="index.html">Назад</a>
-				</li>{% elif current_page_number != 1 %}
-				<li class="page-item">
-					<a class="page-link" href="index{{current_page_number - 1}}.html">Назад</a>
-				</li>{% else %}
-				<li class="page-item disabled">
-					<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Назад</a>
-				</li>{% endif %} {% for page_number in range(1, pages_quantity + 1) %} {% if page_number == 1 and current_page_number == 1 %}
-				<li class="page-item active" aria-current="page">
-					<a class="page-link" href="index.html">{{page_number}}</a><span class="sr-only">(current)</span>
-				</li>{% elif page_number == 1 %}
-				<li class="page-item">
-					<a class="page-link" href="index.html">{{page_number}}</a>
-				</li>{% elif page_number != current_page_number %}
-				<li class="page-item">
-					<a class="page-link" href="index{{page_number}}.html">{{page_number}}</a>
-				</li>{% else %}
-				<li class="page-item active" aria-current="page">
-					<a class="page-link" href="index{{page_number}}.html">{{page_number}}</a><span class="sr-only">(current)</span>
-				</li>{% endif %} {% endfor %} {% if current_page_number != pages_quantity %}
-				<li class="page-item">
-					<a class="page-link" href="index{{current_page_number + 1}}.html">Вперед</a>
-				</li>{% else %}
-				<li class="page-item disabled">
-					<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Вперед</a>
-				</li>{% endif %}
-			</ul>
-		</div>{% for books_row in books %}
-		<div class="container">
-			<div class="row row-cols-{{books_in_row}}" style="flex-wrap: nowrap;">{% for book in books_row %}
-				<div class="card mb-4" style="margin-left: 30px; width: 540px;">
-					<div class="row g-5">
-						<div class="col-md-6">
-							<img src="../{{book.image}}" class="card-img" alt="{{book.title}}">
-						</div>
-						<div class="col-6">
-							<div class="card-body">
-								<h5>{{book.title}}</h5>
-								<p class="card-text">{{book.author}}</p>
-								<p class="card-text"> {% for genre in book.genres %}
-									<span class="badge badge-secondary">{{genre}}</span> {% endfor %}
-								</p>
-								<p class="card-text">
-									<a href="../media/{{book.text_filename}}" target="_blank" rel="noopener noreferrer">Читать</a>
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>{% endfor %}
-			</div>
+      <ul class="pagination mt-3">{% if current_page_number == 2 %}
+        <li class="page-item">
+          <a class="page-link" href="index.html">Назад</a>
+        </li>{% elif current_page_number != 1 %}
+        <li class="page-item">
+          <a class="page-link" href="index{{current_page_number - 1}}.html">Назад</a>
+        </li>{% else %}
+        <li class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Назад</a>
+        </li>{% endif %} {% for page_number in range(1, pages_quantity + 1) %} {% if page_number == 1 and current_page_number == 1 %}
+        <li class="page-item active" aria-current="page">
+          <a class="page-link" href="index.html">{{page_number}}</a><span class="sr-only">(current)</span>
+        </li>{% elif page_number == 1 %}
+        <li class="page-item">
+          <a class="page-link" href="index.html">{{page_number}}</a>
+        </li>{% elif page_number != current_page_number %}
+        <li class="page-item">
+          <a class="page-link" href="index{{page_number}}.html">{{page_number}}</a>
+        </li>{% else %}
+        <li class="page-item active" aria-current="page">
+          <a class="page-link" href="index{{page_number}}.html">{{page_number}}</a><span class="sr-only">(current)</span>
+        </li>{% endif %} {% endfor %} {% if current_page_number != pages_quantity %}
+        <li class="page-item">
+          <a class="page-link" href="index{{current_page_number + 1}}.html">Вперед</a>
+        </li>{% else %}
+        <li class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Вперед</a>
+        </li>{% endif %}
+      </ul>
+    </div>{% for books_row in books %}
+    <div class="container">
+      <div class="row row-cols-{{books_in_row}}" style="flex-wrap: nowrap;">{% for book in books_row %}
+        <div class="card mb-4" style="margin-left: 30px; width: 540px;">
+          <div class="row g-5">
+            <div class="col-md-6">
+              <img src="../{{book.image}}" class="card-img" alt="{{book.title}}">
+            </div>
+            <div class="col-6">
+              <div class="card-body">
+                <h5>{{book.title}}</h5>
+                <p class="card-text">{{book.author}}</p>
+                <p class="card-text"> {% for genre in book.genres %}
+                  <span class="badge badge-secondary">{{genre}}</span> {% endfor %}
+                </p>
+                <p class="card-text">
+                  <a href="../media/{{book.text_filename}}" target="_blank" rel="noopener noreferrer">Читать</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>{% endfor %}
+      </div>
     </div>{% endfor %}
     <script src="../../static/jquery-3.5.1.slim.min.js"></script>
     <script src="../../static/bootstrap.bundle.min.js"></script>
